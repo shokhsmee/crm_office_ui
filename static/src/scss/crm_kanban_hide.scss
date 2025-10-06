@@ -1,0 +1,111 @@
+/* Hide priority stars and deadline clock in CRM Kanban view */
+.o_kanban_crm_hide_extras .o_kanban_record .o_priority,
+.o_kanban_crm_hide_extras .o_kanban_record .o_priority_star,
+.o_kanban_crm_hide_extras .o_kanban_record .o_field_priority,
+.o_kanban_crm_hide_extras .o_kanban_record .fa-star,
+.o_kanban_crm_hide_extras .o_kanban_record .fa-star-o,
+.o_kanban_crm_hide_extras .o_kanban_record .o_field_date,
+.o_kanban_crm_hide_extras .o_kanban_record .fa-clock-o,
+.o_kanban_crm_hide_extras .o_kanban_record .o_kanban_record_deadline,
+.o_kanban_crm_hide_extras .o_kanban_record_top .o_field_date,
+.o_kanban_crm_hide_extras .o_kanban_record_top .fa-clock-o,
+.o_kanban_crm_hide_extras .o_kanban_record_top .o_kanban_record_deadline,
+.o_kanban_crm_hide_extras .o_kanban_record_headings .o_field_date,
+.o_kanban_crm_hide_extras .o_kanban_record_title + .o_field_date,
+.o_kanban_crm_hide_extras .oe_kanban_bottom_left .fa-clock-o,
+.o_kanban_crm_hide_extras .oe_kanban_bottom_left > span:has(.fa-clock-o),
+.o_kanban_crm_hide_extras [name="date_deadline"],
+.o_kanban_crm_hide_extras field[name="date_deadline"] {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+/* Style for Service Number */
+.o_kanban_crm_hide_extras .o_kanban_service_number {
+    font-size: 11px;
+    color: #666;
+    margin-bottom: 4px;
+    padding: 4px 6px;
+    background-color: #f8f9fa;
+    border-radius: 3px;
+}
+
+.o_kanban_crm_hide_extras .o_kanban_service_number strong {
+    color: #495057;
+}
+
+/* Style for phone field */
+.o_kanban_crm_hide_extras .o_kanban_phone_field::before {
+    content: "\f095";
+    font-family: FontAwesome;
+    margin-right: 5px;
+}
+
+/* Style for Usta info section */
+.o_kanban_crm_hide_extras .o_kanban_usta_info {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #e9ecef;
+    font-size: 12px;
+}
+
+.o_kanban_crm_hide_extras .o_kanban_usta_info strong {
+    color: #495057;
+    margin-right: 4px;
+}
+
+/* Red warning text for missing Usta */
+.o_kanban_crm_hide_extras .o_kanban_usta_info .text-danger {
+    color: #dc3545 !important;
+    font-weight: 600 !important;
+}
+
+.o_kanban_crm_hide_extras .o_kanban_usta_info .fw-bold {
+    font-weight: 600 !important;
+}
+
+/* Scope to CRM kanban with our marker class */
+.o_kanban_view.o_kanban_crm.o_kanban_crm_hide_extras {
+
+    /* Stars / priority (all known widgets & icon variants) */
+    .o_kanban_record,
+    .o_kanban_record_top,
+    .oe_kanban_bottom_left {
+      .o_priority,
+      .o_priority_star,
+      .o_field_priority,
+      [name="priority"],
+      .fa-star, .fa-star-o,            /* FA4 */
+      .fa-regular.fa-star,             /* FA5 */
+      .fa-solid.fa-star {              /* FA6 */
+        display: none !important;
+      }
+  
+      /* Deadline / next activity (clock, counters, date) */
+      .o_field_date,
+      .o_kanban_record_deadline,
+      .o_kanban_counter,
+      .o_activity,
+      [name="date_deadline"],
+      field[name="date_deadline"],
+      i.fa-clock, i.fa-clock-o,        /* FA4 */
+      i.fa-regular.fa-clock,           /* FA5 */
+      i.fa-solid.fa-clock {            /* FA6 */
+        display: none !important;
+      }
+    }
+  
+    /* Your extra visuals (unchanged) */
+    .o_kanban_service_number {
+      font-size: 11px; color: #666; margin-bottom: 4px; padding: 4px 6px;
+      background-color: #f8f9fa; border-radius: 3px;
+      strong { color: #495057; }
+    }
+    .o_kanban_phone_field::before { content: "\f095"; font-family: FontAwesome; margin-right: 5px; }
+    .o_kanban_usta_info { margin-top: 8px; padding-top: 8px; border-top: 1px solid #e9ecef; font-size: 12px;
+      strong { color:#495057; margin-right:4px; }
+      .text-danger { color:#dc3545 !important; font-weight:600 !important; }
+      .fw-bold { font-weight:600 !important; }
+    }
+  }
+  

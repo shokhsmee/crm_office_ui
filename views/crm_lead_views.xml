@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- Lead bo'yicha chiqimlar (OUT) oynasi -->
+  <record id="action_cc_zapchast_move_lead" model="ir.actions.act_window">
+    <field name="name">Ishlatilgan zapchastlar</field>
+    <field name="res_model">cc.zapchast.move</field>
+    <field name="view_mode">list,form</field>
+  </record>
+
+  <!-- SUBVIEWS for crm.lead.product.line (TOP-LEVEL) -->
+  <record id="view_crm_lead_product_line_list" model="ir.ui.view">
+    <field name="name">crm.lead.product.line.list</field>
+    <field name="model">crm.lead.product.line</field>
+    <field name="arch" type="xml">
+      <list editable="bottom" string="Sotilgan mahsulot">
+        <field name="product_id" string="Mahsulot"
+               domain="[('sale_ok','=',True)]"
+               options="{'no_create': True}"/>
+        <field name="description" string="Tavsif" optional="show"/>
+        <field name="quantity" string="Miqdor"/>
+        <field name="uom_id" string="Birlik" readonly="1" optional="show"/>
+        <field name="price_unit" string="Narx"/>
+        <field name="currency_id" column_invisible="1"/>
+        <field name="subtotal" string="Jami" sum="Umumiy" readonly="1"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_crm_lead_product_line_form" model="ir.ui.view">
+    <field name="name">crm.lead.product.line.form</field>
+    <field name="model">crm.lead.product.line</field>
+    <field name="arch" type="xml">
+      <form string="Mahsulot">
+        <group>
+          <group>
+            <field name="product_id" domain="[('sale_ok','=',True)]"
+                   options="{'no_create': True}"/>
+            <field name="description"/>
+            <field name="quantity"/>
+            <field name="uom_id" readonly="1"/>
+          </group>
+          <group>
+            <field name="price_unit"/>
+            <field name="currency_id" invisible="1"/>
+            <field name="subtotal" readonly="1"/>
+          </group>
+        </group>
+      </form>
+    </field>
+  </record>
+  <!-- END SUBVIEWS -->
+
+  <!-- Main CRM form inheritance -->
+  <record id="crm_lead_form_inherit_office_ui" model="ir.ui.view">
+    <field name="name">crm.lead.form.inherit.office.ui</field>
+    <field name="model">crm.lead</field>
+    <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+    <field name="arch" type="xml">
+
+      <!-- Add a scope class so we can style/hide header buttons via CSS safely -->
+      <xpath expr="//form" position="attributes">
+        <attribute name="class" add="crm-hide-first-two-stats"/>
+      </xpath>
+
+      <!-- Add inline CSS to hide revenue/probability elements -->
+      <xpath expr="//form" position="inside">
+        <style>
+          .o_form_view h2.row.g-0:has(#probability) { display:none!important; height:0!important; margin:0!important; padding:0!important; overflow:hidden!important; }
+          .o_form_view h2.row:has(span.oe_grey:contains('+')) { display:none!important; }
+          .o_form_view .o_field_widget[name='expected_revenue'],
+          .o_form_view .o_field_widget[name='probability'],
+          .o_form_view .o_field_widget[name='recurring_revenue'],
+          .o_form_view .o_field_widget[name='recurring_plan'],
+          .o_form_view label[for*='expected_revenue'],
+          .o_form_view label[for*='probability'],
+          .o_form_view label[for*='recurring_revenue'],
+          .o_form_view label[for*='recurring_plan'] {
+            display:none!important; visibility:hidden!important; height:0!important; width:0!important; margin:0!important; padding:0!important; position:absolute!important; left:-9999px!important;
+          }
+          .o_form_view td:has(> .o_field_widget[name='expected_revenue']),
+          .o_form_view td:has(> .o_field_widget[name='probability']),
+          .o_form_view tr:has(.o_field_widget[name='expected_revenue']),
+          .o_form_view tr:has(.o_field_widget[name='probability']),
+          .o_form_view .o_group .o_inner_group tbody tr:has(.o_field_widget[name='expected_revenue']),
+          .o_form_view .o_group .o_inner_group tbody tr:has(.o_field_widget[name='probability']) {
+            display:none!important; height:0!important; overflow:hidden!important;
+          }
+          h2:has(div#probability) { display:none!important; }
+        </style>
+      </xpath>
+
+      <!-- Keep fields but invisible -->
+      <xpath expr="//field[@name='expected_revenue']" position="attributes">
+        <attribute name="invisible">1</attribute>
+      </xpath>
+      <xpath expr="//field[@name='probability']" position="attributes">
+        <attribute name="invisible">1</attribute>
+      </xpath>
+      <xpath expr="//field[@name='recurring_revenue']" position="attributes">
+        <attribute name="invisible">1</attribute>
+      </xpath>
+      <xpath expr="//field[@name='recurring_plan']" position="attributes">
+        <attribute name="invisible">1</attribute>
+      </xpath>
+
+      <!-- Translated labels -->
+      <xpath expr="//field[@name='date_deadline']" position="attributes">
+        <attribute name="string">Kutilayotgan yakun</attribute>
+      </xpath>
+
+      <!-- rename the Won button(s) -->
+      <xpath expr="//header//button[@name='action_set_won' or @name='action_set_won_rainbowman']" position="attributes">
+        <attribute name="string">Ish Yakunlandi</attribute>
+      </xpath>
+
+      <xpath expr="//field[@name='name']" position="attributes">
+        <attribute name="string">Murojatchi</attribute>
+      </xpath>
+      <xpath expr="//field[@name='partner_id']" position="attributes">
+        <attribute name="string">Kontakt</attribute>
+      </xpath>
+      <xpath expr="//field[@name='email_from']" position="attributes">
+        <attribute name="string">Email</attribute>
+      </xpath>
+      <xpath expr="//field[@name='phone']" position="attributes">
+        <attribute name="string">Telefon</attribute>
+      </xpath>
+
+      <!-- OFIS BOSHQARUVI & MUROJAAT HUDUDI side by side -->
+      <xpath expr="//sheet/group" position="inside">
+        <group string="OFIS BOSHQARUVI">
+          <field name="service_number" string="Service Raqami" readonly="1"/>
+          <field name="category_type" string="Murojat turi" placeholder="Murojat turini tanlang"/>
+          <field name="usta_id"
+                 string="Usta"
+                 domain="[('is_usta','=',True),('active','=',True)]"
+                 options="{'no_create_edit': False}"
+                 placeholder="Avval Tumanni tanlang..."
+                 readonly="not region_id"/>
+        </group>
+        <group string="MUROJAAT HUDUDI">
+          <field name="country_id" string="Davlat"/>
+          <field name="state_id"
+                 string="Viloyat"
+                 domain="[('country_id','=',country_id)]"
+                 placeholder="Toshkent ..."
+                 required="1"/>
+          <field name="region_id"
+                 string="Tuman"
+                 domain="[('state_id','=',state_id)]"
+                 placeholder="Chilonzor ..."
+                 required="1"
+                 options="{'no_create_edit': True}"/>
+          <field name="street" string="Manzil" placeholder="Ko'cha va uy ..."/>
+        </group>
+      </xpath>
+
+      <!-- ISH TAFSILOTLARI + ISH TASNIFI (inserted together to avoid missing anchors) -->
+      <xpath expr="//sheet/notebook" position="before">
+        <group string="ISH TAFSILOTLARI" name="cc_work_grp">
+          <group>
+            <field name="work_text"
+                 placeholder="Masalan: Diagnostika, kompressor almashtirish, drenaj tozalash..."
+                 nolabel="1"/>
+            <field name="work_amount" string="Ish summasi"/>
+            <field name="work_time_pretty" string="Ishga ketgan vaqt (soat)"/>
+            <field name="photo_attachment_ids" widget="many2many_binary" string="Foto hisobot"/>
+            <field name="accept_at" invisible="1"/>
+            <field name="start_at" invisible="1"/>
+            <field name="finish_at" invisible="1"/>
+          </group>
+        </group>
+      </xpath>
+
+      <!-- Mahsulotlar tab -->
+      <xpath expr="//sheet/notebook" position="inside">
+        <page string="Sotilgan mahsulot" name="mahsulotlar">
+          <field name="product_line_ids"
+                 mode="list,form"
+                 context="{
+                   'default_lead_id': id,
+                   'tree_view_ref': 'crm_office_ui.view_crm_lead_product_line_list',
+                   'form_view_ref': 'crm_office_ui.view_crm_lead_product_line_form'
+                 }"/>
+          <group class="oe_subtotal_footer oe_right">
+            <label for="product_total_amount"/>
+            <div>
+              <field name="product_total_amount"
+                     widget="monetary"
+                     options="{'currency_field': 'currency_id'}"
+                     readonly="1"/>
+            </div>
+          </group>
+        </page>
+      </xpath>
+
+      <!-- Zapchast tab -->
+      <xpath expr="//sheet/notebook" position="inside">
+        <page string="Ishlatilgan zapchastlar">
+          <field name="cc_move_ids" domain="[('move_type','=','out')]"
+                 context="{'default_crm_service_id': id}">
+            <list string="Ishlatilgan zapchastlar">
+              <field name="date"/>
+              <field name="employee_id" string="Usta"/>
+              <field name="zapchast_id" string="Zapchast"/>
+              <field name="uom" string="Birlik"/>
+              <field name="qty" string="Miqdor"/>
+              <field name="unit_price_uzs" string="Narx (UZS)"/>
+              <field name="amount_uzs" string="Jami (UZS)"/>
+              <field name="note" string="Izoh"/>
+            </list>
+            <form string="Zapchast chiqimi">
+              <group>
+                <group>
+                  <field name="date"/>
+                  <field name="employee_id" domain="[('is_usta','=',True),('active','=',True)]" string="Usta"/>
+                  <field name="zapchast_id" string="Zapchast"/>
+                  <field name="uom" readonly="1" string="Birlik"/>
+                  <field name="qty" string="Miqdor"/>
+                </group>
+                <group>
+                  <field name="unit_price_uzs" string="Narx (UZS)"/>
+                  <field name="amount_uzs" readonly="1" string="Jami (UZS)"/>
+                  <field name="note" string="Izoh"/>
+                </group>
+              </group>
+            </form>
+          </field>
+        </page>
+      </xpath>
+
+      <!-- Existing zapchast smart button -->
+      <xpath expr="//sheet//div[@name='button_box']" position="inside">
+        <button name="action_open_used_zapchasts" type="object"
+                class="oe_stat_button" string="Ishlatilgan zapchastlar" icon="fa-wrench">
+          <field name="cc_move_out_count" widget="statinfo"/>
+        </button>
+      </xpath>
+
+      <!-- Finance smart button -->
+      <xpath expr="//sheet//div[@name='button_box']" position="inside">
+        <button name="action_open_finance_lead"
+                type="object"
+                class="oe_stat_button"
+                icon="fa-money">
+          <div class="o_stat_info">
+            <span class="o_stat_text">Xisobotlar</span>
+            <span class="o_stat_value">
+              <field name="finance_amount_sum" widget="monetary"/>
+            </span>
+          </div>
+        </button>
+      </xpath>
+
+      <!-- Calls smart button -->
+      <xpath expr="//sheet//div[@name='button_box']" position="inside">
+        <button name="action_open_utel_calls"
+                type="object"
+                class="oe_stat_button"
+                icon="fa-phone"
+                string="Qo'ng'iroqlar">
+          <field name="utel_call_count" widget="statinfo"/>
+        </button>
+      </xpath>
+
+      <!-- Finance tab -->
+      <xpath expr="//sheet/notebook" position="inside">
+        <page string="Xisobotlar">
+          <field name="finance_ids"
+                 domain="[('lead_id','=',id)]"
+                 context="{'default_lead_id': id, 'default_employee_id': usta_id}">
+            <list string="Xisobotlar (Murojat buyicha)">
+              <field name="date"/>
+              <field name="employee_id" domain="[('is_usta','=',True),('active','=',True)]"/>
+              <field name="direction"/>
+              <field name="kind_id"/>
+              <field name="method_id"/>
+              <field name="amount" widget="monetary"/>
+              <field name="signed_amount" widget="monetary"/>
+              <field name="note"/>
+            </list>
+            <form string="Xisobotlar">
+              <group>
+                <group>
+                  <field name="date"/>
+                  <field name="employee_id" domain="[('is_usta','=',True),('active','=',True)]" string="Usta"/>
+                  <field name="direction"/>
+                  <field name="amount" widget="monetary"/>
+                </group>
+                <group>
+                  <field name="kind_id"/>
+                  <field name="method_id"/>
+                  <field name="note"/>
+                </group>
+              </group>
+              <notebook>
+                <page string="Biriktirish (Check)">
+                  <group>
+                    <field name="receipt_image" widget="image" class="oe_inline"/>
+                    <field name="receipt_filename"/>
+                  </group>
+                </page>
+              </notebook>
+            </form>
+          </field>
+        </page>
+      </xpath>
+
+    </field>
+  </record>
+
+  <!-- Kanban quick-create form -->
+  <record id="crm_lead_quick_create_view_office" model="ir.ui.view">
+    <field name="name">crm.lead.quick.create.office</field>
+    <field name="model">crm.lead</field>
+    <field name="arch" type="xml">
+      <form string="Yangi murojat">
+        <group>
+          <field name="name" string="Murojatchi" placeholder="e.g. Murojatchi"/>
+          <field name="partner_id" context="{'default_is_company': False}" options="{'no_open': True}"/>
+          <field name="phone"/>
+          <field name="category_type"/>
+          <field name="country_id" invisible="1"/>
+          <field name="state_id" string="Viloyat" placeholder="Toshkent..." required="1"/>
+          <field name="region_id"
+                 string="Tuman"
+                 domain="[('state_id','=',state_id)]"
+                 placeholder="Chilonzor..."
+                 required="1"/>
+          <field name="usta_id"
+                 domain="[('is_usta','=',True),('active','=',True)]"
+                 readonly="not region_id"
+                 placeholder="Avval Tumanni tanlang..."/>
+        </group>
+      </form>
+    </field>
+  </record>
+
+  <!-- Kanban view to hide stars/clock, add service number & use our quick-create -->
+  <record id="crm_lead_view_kanban_inherit_office_ui" model="ir.ui.view">
+    <field name="name">crm.lead.kanban.inherit.office.ui</field>
+    <field name="model">crm.lead</field>
+    <field name="inherit_id" ref="crm.crm_case_kanban_view_leads"/>
+    <field name="arch" type="xml">
+
+      <!-- IMPORTANT: point kanban quick-create to our form -->
+      <xpath expr="//kanban" position="attributes">
+        <attribute name="class" add="o_kanban_crm_hide_extras"/>
+        <attribute name="quick_create">1</attribute>
+        <attribute name="quick_create_view">crm_office_ui.crm_lead_quick_create_view_office</attribute>
+      </xpath>
+
+      <!-- extra fields for display -->
+      <xpath expr="//kanban" position="inside">
+        <field name="service_number"/>
+        <field name="usta_id"/>
+      </xpath>
+
+      <xpath expr="//field[@name='name']" position="replace">
+        <div class="o_kanban_service_number">
+          <strong>Service #</strong>
+          <t t-esc="record.service_number.value"/>
+        </div>
+        <field name="name"/>
+      </xpath>
+
+      <xpath expr="//field[@name='partner_id']" position="replace">
+        <field name="phone" class="o_kanban_phone_field"/>
+        <div class="o_kanban_usta_info">
+          <t t-if="record.usta_id.raw_value">
+            <strong>Usta:</strong>
+            <t t-esc="record.usta_id.value"/>
+          </t>
+          <t t-else="">
+            <span class="text-danger fw-bold">Usta biriktiring</span>
+          </t>
+        </div>
+      </xpath>
+      
+    </field>
+  </record>
+
+
+</odoo>

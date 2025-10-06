@@ -1,0 +1,43 @@
+{
+    "name": "Murojatlar",
+    "version": "1.1",
+    "summary": "Office Manager CRM: Usta biriktirish, hudud, kategoriya, foto hisobot, vaqt va summalar",
+    "depends": [
+        "crm", 
+        "mail",
+        'product',          
+        'stock',             
+        'uom',              
+        "employee_zapchast", 
+        "call_center_employees",
+        "cc_finance",
+        "product_sync"
+    ],
+    "author": "Shohjahon Obruyev",
+    "data": [
+        "security/ir.model.access.csv",
+        "data/sequence.xml",
+        "views/crm_lead_views.xml",
+        "views/crm_stage_views.xml",
+        "views/cc_employee_lead_views.xml",
+        # 'views/crm_lead_hide_finance.xml',
+        # "views/assets.xml", 
+    ],
+    "post_init_hook": "post_init_backfill_service_numbers",
+    "assets": {
+        "web.assets_backend": [
+            "crm_office_ui/static/src/scss/crm_lead.scss",
+            "crm_office_ui/static/src/scss/employee_header.scss",
+            "crm_office_ui/static/src/scss/employee_header_stats.scss",
+            "crm_office_ui/static/src/scss/hide_revenue.scss",
+            "crm_office_ui/static/src/scss/crm_kanban_hide.scss",
+            "crm_office_ui/static/src/scss/crm_office_ui.scss",
+            "crm_office_ui/static/src/scss/crm_stage_colors.scss",
+            "crm_office_ui/static/src/js/crm_button_labels.js",
+            # "crm_office_ui/static/src/js/crm_stage_colors.js",
+        ],
+    },
+    "icon": "crm_office_ui/static/icon.png",
+    "license": "LGPL-3",
+    "application": False,
+}

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_cc_employee_form_inherit_lead_stats" model="ir.ui.view">
+        <field name="name">cc.employee.form.inherit.lead.stats</field>
+        <field name="model">cc.employee</field>
+        <field name="inherit_id" ref="call_center_employees.view_cc_employee_form" />
+        <field name="arch" type="xml">
+
+            <!-- Put *smart buttons* inside the sheet's button box (standard Odoo place) -->
+            <xpath expr="//form/sheet" position="inside">
+                <div class="o_button_box" name="button_box">
+
+                    <!-- (optional) Usta balance smart button, same look as CRM stat buttons -->
+                    <!-- <button name="action_open_finance" type="object" class="oe_stat_button"
+                            string="Usta balansi">
+                        <field name="balance_total" widget="statinfo"/>
+                    </button> -->
+
+                    <!-- High-level totals -->
+                    <!-- <button name="action_open_active_leads" type="object"
+                            class="oe_stat_button" string="Faol Ish" icon="fa-briefcase">
+                        <field name="lead_active_count" widget="statinfo"/>
+                    </button> -->
+
+                    <!-- <button name="action_open_done_leads" type="object"
+                            class="oe_stat_button" string="Tugallangan Ish" icon="fa-check">
+                        <field name="lead_done_count" widget="statinfo"/>
+                    </button> -->
+
+                    <!-- Per-stage counts (mirror CRM look) -->
+                    <button name="action_open_stage_new" type="object"
+                        class="oe_stat_button" string="Yangi so'rovlar" icon="fa-flag">
+                        <field name="lead_stage_new_count" widget="statinfo" />
+                    </button>
+
+                    <button name="action_open_stage_qabul" type="object"
+                        class="oe_stat_button" string="Qabul qilindi" icon="fa-inbox">
+                        <field name="lead_stage_qabul_count" widget="statinfo" />
+                    </button>
+
+                    <button name="action_open_stage_qabul_qilinmadi" type="object"
+                        class="oe_stat_button" string="Qabul qilinmadi" icon="fa-ban">
+                        <field name="lead_stage_qabul_qilinmadi_count" widget="statinfo" />
+                    </button>
+
+                    <button name="action_open_stage_jarayonda" type="object"
+                        class="oe_stat_button" string="Jarayonda" icon="fa-refresh">
+                        <field name="lead_stage_jarayonda_count" widget="statinfo" />
+                    </button>
+
+                    <button name="action_open_stage_yakun" type="object"
+                        class="oe_stat_button" string="Ish yakunlandi" icon="fa-check-circle">
+                        <field name="lead_stage_yakun_count" widget="statinfo" />
+                    </button>
+
+                    <button name="action_open_stage_bekor" type="object"
+                        class="oe_stat_button" string="Bekor qilindi" icon="fa-times-circle">
+                        <field name="lead_stage_bekor_count" widget="statinfo" />
+                    </button>
+
+                </div>
+            </xpath>
+
+            <!-- IMPORTANT: remove your previous <header> injection entirely -->
+            <xpath expr="//form/header" position="replace">
+                <header>
+                    <!-- Balance -->
+                    <button name="action_open_finance" type="object" class="oe_stat_button">
+                        <div class="o_stat_info">
+                            <span class="o_stat_text">Usta balansi</span>
+                            <span class="o_stat_value">
+                                <field name="balance_total" widget="monetary" />
+                            </span>
+                        </div>
+                    </button>
+
+                    <!-- Faol -->
+                    <button name="action_open_active_leads" type="object" class="oe_stat_button">
+                        <div class="o_stat_info">
+                            <span class="o_stat_text">Faol</span>
+                            <span class="o_stat_value o_stat_value-pill">
+                                <field name="lead_active_count" />
+                            </span>
+                        </div>
+                    </button>
+
+                    <!-- Tugallangan -->
+                    <button name="action_open_done_leads" type="object" class="oe_stat_button">
+                        <div class="o_stat_info">
+                            <span class="o_stat_text">Tugallangan</span>
+                            <span class="o_stat_value o_stat_value-pill">
+                                <field name="lead_done_count" />
+                            </span>
+                        </div>
+                    </button>
+
+                    <div class="o_statusbar_status" />
+                </header>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

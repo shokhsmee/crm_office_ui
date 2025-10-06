@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <!-- Inherit o‘rniga to‘liq forma beramiz, priority pastroq son = yuqori ustunlik -->
+  <record id="view_crm_stage_form_office_ui" model="ir.ui.view">
+    <field name="name">crm.stage.form.office.ui</field>
+    <field name="model">crm.stage</field>
+    <field name="priority" eval="10"/>
+    <field name="arch" type="xml">
+      <form string="Bosqichlar">
+        <sheet>
+          <group>
+            <group>
+              <field name="name" string="Bosqich nomi" required="1"/>
+              <field name="is_won" string="Yakunlangan bosqichmi?"/>
+              <field name="fold" string="Pipeline’da yig‘ilsinmi?"/>
+              <field name="team_id" string="Sotuv guruhi"/>
+            </group>
+            <group string="Rang sozlamalari">
+              <field name="color_hex" placeholder="#3498db"/>
+              <field name="text_color_hex" placeholder="#ffffff"/>
+            </group>
+          </group>
+
+          <group string="TALABLAR">
+            <field name="requirements" placeholder="Ushbu bosqichga o‘tish shartlari..."/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+</odoo>

@@ -1,0 +1,119 @@
+// Hide Expected Revenue and Probability fields in CRM Lead form
+.o_form_view {
+    // Target any element containing just symbols "+ at %"
+    *:has(> .o_field_widget[name='expected_revenue']):not(:has(*:not(.o_field_widget[name='expected_revenue']):not(.o_field_widget[name='probability']))),
+    *:has(> .o_field_widget[name='probability']):not(:has(*:not(.o_field_widget[name='expected_revenue']):not(.o_field_widget[name='probability']))) {
+      display: none !important;
+    }
+  
+    // Hide any text nodes or elements that contain those symbols
+    .o_group .o_inner_group tbody tr {
+      &:has(.o_field_widget[name='expected_revenue']),
+      &:has(.o_field_widget[name='probability']) {
+        display: none !important;
+        height: 0 !important;
+        line-height: 0 !important;
+        overflow: hidden !important;
+      }
+    }
+  
+    // Nuclear option - hide everything related to these fields
+    .o_field_widget[name='expected_revenue'],
+    .o_field_widget[name='probability'],
+    .o_field_widget[name='recurring_revenue'],
+    .o_field_widget[name='recurring_plan'],
+    *[name='expected_revenue'],
+    *[name='probability'],
+    *[name='recurring_revenue'],
+    *[name='recurring_plan'] {
+      display: none !important;
+      visibility: hidden !important;
+      height: 0 !important;
+      width: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      position: absolute !important;
+      left: -9999px !important;
+      opacity: 0 !important;
+    }
+  
+    // Hide parent elements
+    label[for*='expected_revenue'],
+    label[for*='probability'],
+    td:has(> *[name='expected_revenue']),
+    td:has(> *[name='probability']),
+    div.o_cell:has(> *[name='expected_revenue']),
+    div.o_cell:has(> *[name='probability']) {
+      display: none !important;
+    }
+  }
+  
+  // Additional targeting for CRM specific structure
+  .o_form_view.o_xxl_form_view,
+  .o_form_view {
+    // Hide the wrapper div that might contain + at % symbols
+    .o_row:has(.o_field_widget[name='expected_revenue']),
+    .o_row:has(.o_field_widget[name='probability']) {
+      display: none !important;
+    }
+  }
+  
+  // Specific targeting for CRM lead form
+  .o_form_view[data-view-type='form'].o_crm_lead_form {
+    .o_field_widget[name='expected_revenue'],
+    .o_field_widget[name='probability'],
+    .o_field_widget[name='recurring_revenue'],
+    .o_field_widget[name='recurring_plan'] {
+      display: none !important;
+      visibility: hidden !important;
+      height: 0 !important;
+      width: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+  }
+
+/* Scope to our customized CRM kanban */
+.o_kanban_view.o_kanban_crm.o_kanban_crm_hide_extras {
+
+  /* stars / priority */
+  .o_kanban_record,
+  .o_kanban_record_top,
+  .oe_kanban_bottom_left {
+    .o_priority,
+    .o_priority_star,
+    .o_field_priority,
+    [name="priority"],
+    .fa-star, .fa-star-o,          /* FA4 */
+    .fa-regular.fa-star,            /* FA5 */
+    .fa-solid.fa-star {             /* FA6 */
+      display: none !important;
+    }
+
+    /* deadline / next-activity */
+    .o_field_date,
+    .o_kanban_record_deadline,
+    .o_kanban_counter,
+    .o_activity,
+    [name="date_deadline"],
+    field[name="date_deadline"],
+    i.fa-clock, i.fa-clock-o,       /* FA4 */
+    i.fa-regular.fa-clock,          /* FA5 */
+    i.fa-solid.fa-clock {           /* FA6 */
+      display: none !important;
+    }
+  }
+
+  /* your extra styling (kept) */
+  .o_kanban_service_number {
+    font-size: 11px; color:#666; margin-bottom:4px; padding:4px 6px;
+    background:#f8f9fa; border-radius:3px;
+    strong { color:#495057; }
+  }
+  .o_kanban_phone_field::before { content:"\f095"; font-family:FontAwesome; margin-right:5px; }
+  .o_kanban_usta_info { margin-top:8px; padding-top:8px; border-top:1px solid #e9ecef; font-size:12px;
+    strong { color:#495057; margin-right:4px; }
+    .text-danger { color:#dc3545 !important; font-weight:600 !important; }
+    .fw-bold { font-weight:600 !important; }
+  }
+}

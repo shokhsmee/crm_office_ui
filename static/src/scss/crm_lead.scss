@@ -1,0 +1,107 @@
+/* Yagona joy: CRM lead formidagi statusbar */
+.o_form_view .o_form_statusbar button[name="action_set_lost"] {
+    display: none !important;
+}
+
+/* Ba'zi instansiyalarda name boshqa bo'lishi mumkin — quyi qatorlar qo'shimcha kafolat */
+.o_form_view .o_form_statusbar button[name*="lost"],
+.o_form_view .o_form_statusbar button[data-hotkey="l"] {
+    display: none !important;
+}
+
+/* CRM Kanban Stage Colors - To'g'ri ID lar bilan */
+
+/* Yangi so'rovlar - Moviy (ID: 1) */
+.o_kanban_group[data-id="1"] .o_kanban_header {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%) !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    border-bottom: 3px solid #2980b9 !important;
+}
+
+/* Qabul qilindi - Yashil (ID: 2) */
+.o_kanban_group[data-id="2"] .o_kanban_header {
+    background: linear-gradient(135deg, #27ae60 0%, #229954 100%) !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    border-bottom: 3px solid #229954 !important;
+}
+
+/* Jarayonda - Apelsinli (ID: 3) */
+.o_kanban_group[data-id="3"] .o_kanban_header {
+    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%) !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    border-bottom: 3px solid #e67e22 !important;
+}
+
+/* Ish yakunlandi - Binafsha (ID: 4) */
+.o_kanban_group[data-id="4"] .o_kanban_header {
+    background: linear-gradient(135deg, #8e44ad 0%, #7d3c98 100%) !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    border-bottom: 3px solid #7d3c98 !important;
+}
+
+/* Qabul qilinmadi - Kulrang (ID: 5) */
+.o_kanban_group[data-id="5"] .o_kanban_header {
+    background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%) !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    border-bottom: 3px solid #7f8c8d !important;
+}
+
+/* Bekor qilindi - Qizil (ID: 6) */
+.o_kanban_group[data-id="6"] .o_kanban_header {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%) !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    border-bottom: 3px solid #c0392b !important;
+}
+
+/* Stage header uchun umumiy stillar */
+.o_kanban_header {
+    border-radius: 6px 6px 0 0 !important;
+    padding: 12px 16px !important;
+    font-weight: 600 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    transition: all 0.3s ease !important;
+    
+    &:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+        transform: translateY(-1px) !important;
+    }
+    
+    .o_kanban_header_title {
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+    }
+}
+
+/* Kanban column uchun umumiy */
+.o_kanban_group {
+    background: #f8f9fa !important;
+    border-radius: 8px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+    margin: 0 8px !important;
+}
+
+/* Record counter badge styling */
+.o_kanban_header .o_kanban_counter {
+    background: rgba(255, 255, 255, 0.3) !important;
+    border-radius: 12px !important;
+    padding: 2px 8px !important;
+    font-weight: 700 !important;
+    font-size: 12px !important;
+}
+
+/* Hide first two stat buttons in form view */
+.o_form_view.crm-hide-first-two-stats {
+    .oe_button_box {
+        .oe_stat_button:nth-child(-n + 2) {
+            display: none !important;
+        }
+    }
+}

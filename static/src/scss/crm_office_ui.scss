@@ -1,0 +1,90 @@
+// CRM Office UI Custom Styles
+// =============================
+
+// Won button styling when visible
+.o_form_view {
+    button[name='action_set_won'] {
+        &.oe_highlight {
+            // Make the Won button more prominent in "Ish yakunlandi" stage
+            background-color: #28a745;
+            border-color: #28a745;
+            
+            &:hover {
+                background-color: #218838;
+                border-color: #1e7e34;
+            }
+            
+            &:focus {
+                box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5);
+            }
+        }
+    }
+    
+    // Style for when Won button should be hidden (backup to invisible attribute)
+    button[name='action_set_won'][invisible='1'] {
+        display: none !important;
+    }
+}
+
+// Kanban view custom styles
+.o_kanban_crm_hide_extras {
+    .o_kanban_service_number {
+        font-size: 0.85em;
+        color: #6c757d;
+        margin-bottom: 4px;
+        
+        strong {
+            color: #495057;
+        }
+    }
+    
+    .o_kanban_phone_field {
+        font-weight: 500;
+        color: #212529;
+        margin-bottom: 4px;
+    }
+    
+    .o_kanban_usta_info {
+        font-size: 0.9em;
+        padding: 4px 8px;
+        background-color: #f8f9fa;
+        border-radius: 4px;
+        margin-top: 4px;
+        
+        strong {
+            color: #495057;
+        }
+        
+        .text-danger {
+            background-color: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            border: 1px solid #ffc107;
+        }
+    }
+}
+
+// Stage-specific button visibility (additional CSS support)
+.o_form_view[data-stage="Ish yakunlandi"] {
+    button[name='action_set_won'] {
+        display: inline-block !important;
+    }
+}
+
+// Hide Won button in all other stages (backup rule)
+.o_form_view:not([data-stage="Ish yakunlandi"]) {
+    button[name='action_set_won']:not(.oe_highlight) {
+        display: none !important;
+    }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+    .o_kanban_crm_hide_extras {
+        .o_kanban_service_number,
+        .o_kanban_phone_field,
+        .o_kanban_usta_info {
+            font-size: 0.85em;
+        }
+    }
+}

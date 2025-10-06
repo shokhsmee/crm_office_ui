@@ -1,0 +1,12 @@
+<odoo noupdate="1">
+    <record id="seq_crm_lead_service_number" model="ir.sequence">
+      <field name="name">CRM Servis Number</field>
+      <field name="code">crm.lead.service.number</field>
+      <field name="prefix"></field>
+      <field name="padding">6</field>
+      <field name="number_next">100000</field>
+      <field name="implementation">standard</field>
+      <field name="use_date_range">False</field>
+    </record>
+  </odoo>
+  

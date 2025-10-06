@@ -1,0 +1,13 @@
+/* crm_office_ui/static/src/scss/employee_header_stats.scss */
+.o_form_view .oe_stat_button .o_stat_info {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;            /* <-- ensures space after the word */
+  }
+  .o_form_view .oe_stat_button .o_stat_value-pill {
+    padding: 0 .5rem;
+    border-radius: 8px;
+    background: #eef1f6;
+    font-weight: 600;
+  }
+  
