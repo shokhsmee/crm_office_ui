@@ -46,6 +46,100 @@ class CrmLead(models.Model):
         store=False,
     )
 
+    # in crm_office_ui/models/crm_lead.py (your CrmLead)
+
+    customer_rating = fields.Integer(
+        string="Mijoz reytingi (0-10)",
+        help="Mijozdan olingan baho. 9-10:3 ball, 8-9:2, 7-8:1.5, 6-7:0.5",
+    )
+
+    tasks_done_count = fields.Integer(
+        string="Bajarilgan topshiriqlar soni",
+        help="Kunlik topshiriqlar/yo'riqnomalar bo'yicha. 0..∞. Max 3 ball (normalize).",
+    )
+
+    kpi_result_id = fields.Many2one("cc.kpi.result", string="KPI natija", copy=False, readonly=True)
+
+    def _kpi_completion_points(self, start_dt, finish_dt):
+        """Map completion days → points per your diagram."""
+        if not start_dt or not finish_dt:
+            return 0.0, "late"
+        days = (finish_dt - start_dt).days
+        if days <= 1:  # same/next day not in diagram, give max
+            return 3.0, "d2"
+        if days == 2:
+            return 3.0, "d2"
+        if days == 3:
+            return 2.0, "d3"
+        if days == 4:
+            return 1.5, "d4"
+        if days in (5, 6):
+            return 1.0, "d56"
+        if days == 7:
+            return 0.5, "d7"
+        return 0.0, "late"
+
+    def _kpi_rating_points(self, rating):
+        r = int(rating or 0)
+        if r >= 9:
+            return 3.0
+        if r >= 8:
+            return 2.0
+        if r >= 7:
+            return 1.5
+        if r >= 6:
+            return 0.5
+        return 0.0
+
+    def _kpi_tasks_points(self, n):
+        """Cap to 3 points; you can wire real rule later."""
+        n = int(n or 0)
+        # e.g., 1 task = 1pt, 2=2, 3+=3
+        return float(min(3, max(0, n)))
+
+    def _compute_and_store_kpi(self):
+        Kpi = self.env["cc.kpi.result"].sudo()
+        for lead in self:
+            # only when finished and has Usta
+            if not (lead.finish_at and (lead.usta_id or False)):
+                continue
+
+            start_ref = lead.accept_at or lead.start_at or lead.create_date
+            comp_pts, bucket = lead._kpi_completion_points(start_ref, lead.finish_at)
+            rating_pts = lead._kpi_rating_points(lead.customer_rating)
+            tasks_pts  = lead._kpi_tasks_points(lead.tasks_done_count)
+
+            vals = {
+                "lead_id": lead.id,
+                "days_bucket": bucket,
+                "points_completion": comp_pts,
+                "points_rating": rating_pts,
+                "points_tasks": tasks_pts,
+            }
+            if lead.kpi_result_id:
+                lead.kpi_result_id.write(vals)
+            else:
+                res = Kpi.create(vals)
+                lead.kpi_result_id = res.id
+
+    # def write(self, vals):
+    #     res = super(CrmLead, self).write(vals)
+    #     # when stage moves to finished or inputs change, recompute KPI
+    #     if any(k in vals for k in ("stage_id", "finish_at", "accept_at", "start_at",
+    #                             "customer_rating", "tasks_done_count")):
+    #         finished = self.filtered(lambda l: l.finish_at)
+    #         finished._compute_and_store_kpi()
+    #     return res
+
+
+    def _next_service_number_for_company(self, company):
+        Seq = self.env["ir.sequence"].with_company(company).sudo()
+        num = Seq.next_by_code(SERVICE_SEQ_CODE)
+        if not num:
+            # global (company_id=False) bo‘lsa undan oling
+            SeqGlobal = self.env["ir.sequence"].with_company(False).sudo()
+            num = SeqGlobal.next_by_code(SERVICE_SEQ_CODE)
+        return num or "/"
     
     
     @api.depends("accept_at", "start_at", "finish_at", "write_date")
@@ -276,68 +370,62 @@ class CrmLead(models.Model):
         ("uniq_service_number", "unique(service_number)", "Service number must be unique."),
     ]
 
-    def _next_service_number(self):
-        return self.env["ir.sequence"].next_by_code(SERVICE_SEQ_CODE)
+    # def _next_service_number(self):
+    #     return self.env["ir.sequence"].next_by_code(SERVICE_SEQ_CODE)
 
     @api.model_create_multi
     def create(self, vals_list):
-        Seq = self.env["ir.sequence"].sudo()
-        for vals in vals_list:
-            if not vals.get("service_number"):
-                try:
-                    vals["service_number"] = Seq.next_by_code(SERVICE_SEQ_CODE) or "/"
-                except Exception:
-                    vals["service_number"] = "/"
-        return super(CrmLead, self).create(vals_list)
+        # Avval super
+        leads = super(CrmLead, self).create(vals_list)
+
+        # Service raqamini companyga qarab tayinlash (agar bo‘sh bo‘lsa)
+        for lead in leads.sudo():
+            if not lead.service_number:
+                num = lead._next_service_number_for_company(lead.company_id or self.env.company)
+                lead.with_context(skip_service_number=True).write({"service_number": num})
+        return leads
 
     def write(self, vals):
-        # 1) run base write
+        # 1) Avval super
         res = super(CrmLead, self).write(vals)
 
-        # 2) assign service number to any record still missing it
+        # 2) Service raqami tayinlash (agar hali ham yo‘q bo‘lsa)
         if not self.env.context.get("skip_service_number"):
-            to_assign = self.filtered(lambda l: not l.service_number)
-            if to_assign:
-                Seq = self.env["ir.sequence"].sudo()
-                for lead in to_assign:
-                    try:
-                        num = Seq.next_by_code(SERVICE_SEQ_CODE) or "/"
-                    except Exception:
-                        num = "/"
-                    lead.with_context(skip_service_number=True).sudo().write({"service_number": num})
+            for lead in self.sudo().filtered(lambda l: not l.service_number):
+                num = lead._next_service_number_for_company(lead.company_id or self.env.company)
+                lead.with_context(skip_service_number=True).write({"service_number": num})
 
-        # 3) timeline updates based on stage name
+        # 3) Stage ga qarab timeline update (accept/start/finish + work_time_spent)
         if "stage_id" in vals:
             now = fields.Datetime.now()
             for lead in self.sudo():
                 stage_name = (lead.stage_id.name or "").lower()
                 updates = {}
 
-                # Qabul qilindi / Kutilmoqda / Waiting
                 if any(k in stage_name for k in ("qabul", "waiting", "kutil")) and not lead.accept_at:
                     updates["accept_at"] = now
 
-                # Jarayonda / In Progress
                 if any(k in stage_name for k in ("jarayon", "progress")) and not lead.start_at:
-                    # set accept_at if the lead skipped it
                     updates.setdefault("accept_at", now)
                     updates["start_at"] = now
 
-                # Yakunlandi / Done / Finished
                 if any(k in stage_name for k in ("yakun", "done", "finish")):
                     updates.setdefault("finish_at", now)
                     start_dt = lead.accept_at or lead.start_at or lead.create_date
                     if start_dt:
-                        seconds = ((updates["finish_at"]) - start_dt).total_seconds()
+                        seconds = (updates["finish_at"] - start_dt).total_seconds()
                         updates["work_time_spent"] = round(seconds / 3600.0, 2)
 
                 if updates:
-                    # avoid re-triggering service-number part
                     lead.with_context(skip_service_number=True).sudo().write(updates)
 
-        return res
+        # # 4) KPI qayta hisoblash (finish_at yoki tegishli maydonlar o‘zgarsa)
+        # if any(k in vals for k in ("stage_id", "finish_at", "accept_at", "start_at",
+        #                            "customer_rating", "tasks_done_count")):
+        #     finished = self.filtered(lambda l: l.finish_at)
+        #     finished._compute_and_store_kpi()
 
-
+        # return res
 
 class CrmLeadProductLine(models.Model):
     _name = "crm.lead.product.line"

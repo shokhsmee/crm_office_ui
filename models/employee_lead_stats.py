@@ -7,6 +7,7 @@ STAGE_TITLES = [
     "Qabul qilinmadi",
     "Jarayonda",
     "Ish yakunlandi",
+    "Tasdiqlandi",
     "Bekor qilindi",
 ]
 
@@ -23,6 +24,7 @@ class CcEmployee(models.Model):
     lead_stage_qabul_qilinmadi_count   = fields.Integer(string="Qabul qilinmadi",   compute="_compute_lead_stats", store=False)
     lead_stage_jarayonda_count         = fields.Integer(string="Jarayonda",         compute="_compute_lead_stats", store=False)
     lead_stage_yakun_count             = fields.Integer(string="Ish yakunlandi",    compute="_compute_lead_stats", store=False)
+    lead_stage_tasdiqlandi_count       = fields.Integer(string="Tasdiqlandi",       compute="_compute_lead_stats", store=False)
     lead_stage_bekor_count             = fields.Integer(string="Bekor qilindi",     compute="_compute_lead_stats", store=False)
 
     def _compute_lead_stats(self):
@@ -44,6 +46,7 @@ class CcEmployee(models.Model):
             emp.lead_stage_qabul_qilinmadi_count = 0
             emp.lead_stage_jarayonda_count = 0
             emp.lead_stage_yakun_count = 0
+            emp.lead_stage_tasdiqlandi_count = 0
             emp.lead_stage_bekor_count = 0
 
             if not emp.id:
@@ -66,6 +69,7 @@ class CcEmployee(models.Model):
             emp.lead_stage_qabul_qilinmadi_count = count_for("Qabul qilinmadi")
             emp.lead_stage_jarayonda_count       = count_for("Jarayonda")
             emp.lead_stage_yakun_count           = count_for("Ish yakunlandi")
+            emp.lead_stage_tasdiqlandi_count     = count_for("Tasdiqlandi")
             emp.lead_stage_bekor_count           = count_for("Bekor qilindi")
 
     # === Open helpers (unchanged) ===
@@ -97,6 +101,7 @@ class CcEmployee(models.Model):
     def action_open_stage_qabul_qilinmadi(self):  return self._open_by_stage("Qabul qilinmadi")
     def action_open_stage_jarayonda(self):        return self._open_by_stage("Jarayonda")
     def action_open_stage_yakun(self):            return self._open_by_stage("Ish yakunlandi")
+    def action_open_stage_tasdiq(self):           return self._open_by_stage("Tasdiqlandi")
     def action_open_stage_bekor(self):            return self._open_by_stage("Bekor qilindi")
 
     def _open_by_stage(self, title):

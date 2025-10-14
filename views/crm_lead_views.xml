@@ -133,11 +133,14 @@
           <field name="service_number" string="Service Raqami" readonly="1"/>
           <field name="category_type" string="Murojat turi" placeholder="Murojat turini tanlang"/>
           <field name="usta_id"
-                 string="Usta"
-                 domain="[('is_usta','=',True),('active','=',True)]"
-                 options="{'no_create_edit': False}"
-                 placeholder="Avval Tumanni tanlang..."
-                 readonly="not region_id"/>
+                string="Usta"
+                domain="[('is_usta','=',True),
+                        ('active','=',True),
+                        ('service_region_ids','in',[region_id])]"
+                options="{'no_create_edit': False}"
+                placeholder="Avval Tumanni tanlang..."
+                readonly="not region_id"/>
+   
         </group>
         <group string="MUROJAAT HUDUDI">
           <field name="country_id" string="Davlat"/>
@@ -329,7 +332,9 @@
                  placeholder="Chilonzor..."
                  required="1"/>
           <field name="usta_id"
-                 domain="[('is_usta','=',True),('active','=',True)]"
+                 domain="[('is_usta','=',True),
+                          ('active','=',True),
+                          ('service_region_ids','in',[region_id])]"
                  readonly="not region_id"
                  placeholder="Avval Tumanni tanlang..."/>
         </group>

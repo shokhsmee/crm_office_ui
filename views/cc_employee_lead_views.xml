@@ -49,9 +49,18 @@
                     </button>
 
                     <button name="action_open_stage_yakun" type="object"
-                        class="oe_stat_button" string="Ish yakunlandi" icon="fa-check-circle">
+                        class="oe_stat_button" string="Ish yakunlandi" icon="fa-flag-checkered">
                         <field name="lead_stage_yakun_count" widget="statinfo" />
                     </button>
+
+                    <button name="action_open_stage_tasdiq"
+                            type="object"
+                            class="oe_stat_button"
+                            string="Tasdiqlandi"
+                            icon="fa-check-circle">
+                        <field name="lead_stage_tasdiqlandi_count" widget="statinfo"/>
+                    </button>
+            
 
                     <button name="action_open_stage_bekor" type="object"
                         class="oe_stat_button" string="Bekor qilindi" icon="fa-times-circle">
