@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve" id="crm_office_ui_templates">
+  <t t-name="crm_office_ui.GeoPicker">
+    <div class="o_geo_picker">
+      <div t-ref="map" class="o_geo_map" style="height:280px;"></div>
+      <div class="o_geo_info mt-2">
+        <span>Lat: <t t-esc="props.record?.data?.geo_lat ?? '-'"/></span>
+        <span class="ms-3">Lng: <t t-esc="props.record?.data?.geo_lng ?? '-'"/></span>
+      </div>
+    </div>
+  </t>
+</templates>

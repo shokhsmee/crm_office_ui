@@ -1,0 +1,5 @@
+/* Hide the kanban header right stat (it’s always 0 in your build) */
+.o_kanban_header_right .o_stat_text {
+    display: none !important;
+  }
+  

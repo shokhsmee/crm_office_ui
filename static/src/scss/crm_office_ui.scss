@@ -26,6 +26,10 @@
     }
 }
 
+.o_geo_map { height: 260px; border-radius: 6px; }
+.o_geo_toolbar { display:flex; gap:.5rem; align-items:center; margin-bottom:.5rem; }
+.o_geo_search { flex:1; }
+
 // Kanban view custom styles
 .o_kanban_crm_hide_extras {
     .o_kanban_service_number {
@@ -88,3 +92,15 @@
         }
     }
 }
+
+.cl-stage-label {
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  
+/* map the same classes to text colors (no background) */
+.cl-stage-label.cl-blue   { color: #0b63ce; }  /* Yangi so'rovlar */
+.cl-stage-label.cl-green  { color: #0f7b3a; }  /* Qabul qilindi / Tasdiqlandi */
+.cl-stage-label.cl-yellow { color: #a17400; }  /* Jarayonda */
+.cl-stage-label.cl-red    { color: #c03221; }  /* Qabul qilinmadi */
+.cl-stage-label.cl-purple { color: #5d3fd3; }  /* Ish yakunlandi */

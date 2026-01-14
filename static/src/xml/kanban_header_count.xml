@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+  <t t-name="crm_office_ui.KanbanHeaderCount"
+     t-inherit="web.KanbanColumnHeader"
+     t-inherit-mode="extension">
+
+    <!-- Replace the first “expected revenue” counter with our real count -->
+    <xpath expr="//div[contains(@class,'o_kanban_counter')]/div[contains(@class,'o_animated_number')][1]" position="replace">
+      <div class="o_animated_number ms-2 text-900 text-nowrap cursor-default" title="Leads in stage">
+        <t t-set="cnt"
+           t-value="
+             (props.group && props.group.count)
+             or (props.group && props.group.aggregateValues && props.group.aggregateValues.__count)
+             or (props.group && props.group.aggregateValues && props.group.aggregateValues.count)
+             or (props.group && props.group.data && props.group.data.__count)
+             or (props.group && props.group.data && props.group.data.count)
+             or 0
+           "/>
+        <b t-esc="cnt"/>
+      </div>
+    </xpath>
+
+    <!-- Hide the second counter (+0 Expected MRR) -->
+    <xpath expr="//div[contains(@class,'o_kanban_counter')]/div[contains(@class,'o_animated_number')][2]" position="replace">
+      <div/>
+    </xpath>
+
+  </t>
+</templates>

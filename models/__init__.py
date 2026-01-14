@@ -5,3 +5,5 @@ from . import employee_lead_stats
 from . import crm_lead_inherit
 from . import crm_calls
 from . import crm_lead_won_notify
+from . import crm_stage_lead_count
+from . import crm_product

@@ -1,154 +1,37 @@
-/* CRM Kanban Stage Colors - FORCED VERSION */
+/* crm_office_ui/static/src/scss/kanban_progress.scss */
 
-/* Stage ID lar:
-   1 - Yangi so'rovlar (Moviy)
-   2 - Qabul qilindi (Yashil)
-   3 - Jarayonda (Apelsinli)
-   4 - Ish yakunlandi (Binafsha)
-   5 - Qabul qilinmadi (Kulrang)
-   6 - Bekor qilindi (Qizil)
-*/
-
-/* YANGI SO'ROVLAR - MOVIY (ID: 1) */
-.o_kanban_group[data-id="1"] .o_kanban_header,
-.o_kanban_group[data-id="1"] > .o_kanban_header {
-    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%) !important;
-    background-color: #3498db !important;
-    color: #ffffff !important;
-    font-weight: 600 !important;
-    border-bottom: 3px solid #2980b9 !important;
+/* Outer gray background (track) */
+.o_column_progress {
+  background-color: #e8eaf0 !important;  /* light gray track */
+  border-radius: 999px;
+  height: 6px;
 }
 
-/* QABUL QILINDI - YASHIL (ID: 2) */
-.o_kanban_group[data-id="2"] .o_kanban_header,
-.o_kanban_group[data-id="2"] > .o_kanban_header {
-    background: linear-gradient(135deg, #27ae60 0%, #229954 100%) !important;
-    background-color: #27ae60 !important;
-    color: #ffffff !important;
-    font-weight: 600 !important;
-    border-bottom: 3px solid #229954 !important;
+/* Inner fill bar (default green) */
+.o_column_progress .o_bar_has_records {
+  background-color: #148d8f !important;  
+  border-radius: 999px;
 }
 
-/* JARAYONDA - APELSINLI (ID: 3) */
-.o_kanban_group[data-id="3"] .o_kanban_header,
-.o_kanban_group[data-id="3"] > .o_kanban_header {
-    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%) !important;
-    background-color: #f39c12 !important;
-    color: #ffffff !important;
-    font-weight: 600 !important;
-    border-bottom: 3px solid #e67e22 !important;
+/* Stage-specific overrides (match EXACT column titles) */
+.o_kanban_group[data-name*="YANGI SO'ROVLAR"] .o_bar_has_records {
+  background-color: #0b63ce !important; /* blue */
 }
-
-/* ISH YAKUNLANDI - BINAFSHA (ID: 4) */
-.o_kanban_group[data-id="4"] .o_kanban_header,
-.o_kanban_group[data-id="4"] > .o_kanban_header {
-    background: linear-gradient(135deg, #8e44ad 0%, #7d3c98 100%) !important;
-    background-color: #8e44ad !important;
-    color: #ffffff !important;
-    font-weight: 600 !important;
-    border-bottom: 3px solid #7d3c98 !important;
+.o_kanban_group[data-name*="JARAYONDA"] .o_bar_has_records {
+  background-color: #a17400 !important; /* amber */
 }
-
-/* QABUL QILINMADI - KULRANG (ID: 5) */
-.o_kanban_group[data-id="5"] .o_kanban_header,
-.o_kanban_group[data-id="5"] > .o_kanban_header {
-    background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%) !important;
-    background-color: #95a5a6 !important;
-    color: #ffffff !important;
-    font-weight: 600 !important;
-    border-bottom: 3px solid #7f8c8d !important;
+.o_kanban_group[data-name*="QABUL QILINMADI"] .o_bar_has_records {
+  background-color: #c03221 !important; /* red */
 }
-
-/* BEKOR QILINDI - QIZIL (ID: 6) */
-.o_kanban_group[data-id="6"] .o_kanban_header,
-.o_kanban_group[data-id="6"] > .o_kanban_header {
-    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%) !important;
-    background-color: #e74c3c !important;
-    color: #ffffff !important;
-    font-weight: 600 !important;
-    border-bottom: 3px solid #c0392b !important;
+.o_kanban_group[data-name*="TASDIQLANDI"] .o_bar_has_records {
+  background-color: #0f7b3a !important; /* green */
 }
-
-/* Stage header uchun umumiy stillar - SUPER FORCED */
-.o_kanban_header {
-    border-radius: 6px 6px 0 0 !important;
-    padding: 12px 16px !important;
-    font-weight: 600 !important;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
-    transition: all 0.3s ease !important;
+.o_kanban_group[data-name*="QABUL QILINDI"] .o_bar_has_records {
+  background-color: #0f7b3a !important; /* green */
 }
-
-.o_kanban_header:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
-    transform: translateY(-1px) !important;
+.o_kanban_group[data-name*="ISH YAKUNLANDI"] .o_bar_has_records {
+  background-color: #5d3fd3 !important; /* purple */
 }
-
-.o_kanban_header .o_kanban_header_title {
-    font-size: 14px !important;
-    font-weight: 600 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.5px !important;
+.o_kanban_group[data-name*="BEKOR QILINDI"] .o_bar_has_records {
+  background-color: #c03221 !important; /* red */
 }
-
-/* Kanban column uchun umumiy */
-.o_kanban_group {
-    background: #f8f9fa !important;
-    border-radius: 8px !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
-    margin: 0 8px !important;
-}
-
-/* Record counter badge styling */
-.o_kanban_header .o_kanban_counter {
-    background: rgba(255, 255, 255, 0.3) !important;
-    border-radius: 12px !important;
-    padding: 2px 8px !important;
-    font-weight: 700 !important;
-    font-size: 12px !important;
-}
-
-/* Quick create button styling */
-.o_kanban_group .o_kanban_quick_add {
-    opacity: 0.8 !important;
-    transition: opacity 0.3s ease !important;
-}
-
-.o_kanban_group .o_kanban_quick_add:hover {
-    opacity: 1 !important;
-}
-
-/* Drag and drop hover effect */
-.o_kanban_group.o_kanban_hover {
-    background: #e8f4f8 !important;
-    transition: background 0.3s ease !important;
-}
-
-/* Empty column message */
-.o_kanban_group .o_kanban_load_more,
-.o_kanban_group .oe_kanban_no_result {
-    color: #6c757d !important;
-    font-style: italic !important;
-    padding: 20px !important;
-    text-align: center !important;
-}
-
-/* EXTRA FORCE - Agar yuqoridagilar ishlamasa */
-div.o_kanban_group[data-id="1"] div.o_kanban_header { background-color: #3498db !important; color: white !important; }
-div.o_kanban_group[data-id="2"] div.o_kanban_header { background-color: #27ae60 !important; color: white !important; }
-div.o_kanban_group[data-id="3"] div.o_kanban_header { background-color: #f39c12 !important; color: white !important; }
-div.o_kanban_group[data-id="4"] div.o_kanban_header { background-color: #8e44ad !important; color: white !important; }
-div.o_kanban_group[data-id="5"] div.o_kanban_header { background-color: #95a5a6 !important; color: white !important; }
-div.o_kanban_group[data-id="6"] div.o_kanban_header { background-color: #e74c3c !important; color: white !important; }
-
-/* Hide Lost button in statusbar */
-.o_form_view .o_form_statusbar button[name="action_set_lost"],
-.o_form_view .o_form_statusbar button[name*="lost"],
-.o_form_view .o_form_statusbar button[data-hotkey="l"] {
-    display: none !important;
-}
-
-/* Hide first two stat buttons in form view */
-.o_form_view.crm-hide-first-two-stats .oe_button_box .oe_stat_button:nth-child(-n + 2) {
-    display: none !important;
-}
-

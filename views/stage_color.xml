@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+
+    <!-- Pipeline (Opportunities) list -->
+    <record id="view_crm_lead_list_cols_pipeline" model="ir.ui.view">
+      <field name="name">crm.lead.list.replace.cols.pipeline</field>
+      <field name="model">crm.lead</field>
+      <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
+      <field name="priority">99</field>
+      <field name="arch" type="xml">
+        <xpath expr="//list|//tree" position="replace">
+          <list string="Pipeline"
+                decoration-info="stage_id and stage_id.name == &quot;Yangi so'rovlar&quot;"
+                decoration-primary="stage_id and stage_id.name == &quot;Qabul qilindi&quot;"
+                decoration-warning="stage_id and stage_id.name == &quot;Jarayonda&quot;"
+                decoration-success="stage_id and stage_id.name in (&quot;Tasdiqlandi&quot;, &quot;Ish yakunlandi&quot;)"
+                decoration-danger="stage_id and stage_id.name in (&quot;Qabul qilinmadi&quot;, &quot;Bekor qilindi&quot;)">
+            <field name="service_number" string="Opportunity"/>
+            <field name="contact_display" string="Kontakt nomi"/>
+            <field name="usta_id" string="Usta"/>
+            <field name="user_id" string="Ma'sul xodim"/>
+            <field name="stage_id" string="Bosqich"/>
+            <field name="create_date" string="Yaratilgan vaqti" widget="datetime"/>
+          </list>
+        </xpath>
+      </field>
+    </record>
+
+    <!-- All Leads list -->
+    <record id="view_crm_lead_list_cols_leads" model="ir.ui.view">
+      <field name="name">crm.lead.list.replace.cols.leads</field>
+      <field name="model">crm.lead</field>
+      <field name="inherit_id" ref="crm.crm_case_tree_view_leads"/>
+      <field name="priority">99</field>
+      <field name="arch" type="xml">
+        <xpath expr="//list|//tree" position="replace">
+          <list string="Leads"
+                decoration-info="stage_id and stage_id.name == &quot;Yangi so'rovlar&quot;"
+                decoration-primary="stage_id and stage_id.name == &quot;Qabul qilindi&quot;"
+                decoration-warning="stage_id and stage_id.name == &quot;Jarayonda&quot;"
+                decoration-success="stage_id and stage_id.name in (&quot;Tasdiqlandi&quot;, &quot;Ish yakunlandi&quot;)"
+                decoration-danger="stage_id and stage_id.name in (&quot;Qabul qilinmadi&quot;, &quot;Bekor qilindi&quot;)">
+            <field name="service_number" string="Opportunity"/>
+            <field name="contact_display" string="Kontakt nomi"/>
+            <field name="usta_id" string="Usta"/>
+            <field name="user_id" string="Ma'sul xodim"/>
+            <field name="stage_id" string="Bosqich"/>
+            <field name="create_date" string="Yaratilgan vaqti" widget="datetime"/>
+          </list>
+        </xpath>
+      </field>
+    </record>
+
+  </data>
+</odoo>
